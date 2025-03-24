@@ -10,10 +10,10 @@ public class RentalService {
     private double pricePerDay;  // Armazena o preço por dia do aluguel
     private double pricePerHour; // Armazena o preço por hora do aluguel
 
-    private BrazilTaxService taxService; // Instância do serviço de imposto do Brasil
+    private TaxService taxService; // Instância do serviço de imposto do Brasil
 
     // Construtor da classe RentalService
-    public RentalService(double pricePerHour, double pricePerDay, BrazilTaxService taxService) {
+    public RentalService(double pricePerHour, double pricePerDay, TaxService taxService) {
         this.pricePerHour = pricePerHour;   // Inicializa o preço por hora
         this.pricePerDay = pricePerDay;  // Inicializa o preço por dia
         this.taxService = taxService;  // Inicializa o serviço de imposto

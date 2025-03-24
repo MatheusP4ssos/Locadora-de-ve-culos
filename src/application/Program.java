@@ -12,6 +12,7 @@ import model.service.BrazilTaxService;  // Importa a classe de serviço de impos
 import model.entities.CarRental;  // Importa a classe CarRental, que representa um aluguel de carro
 import model.entities.Vehicle;  // Importa a classe Vehicle, que representa um veículo
 import model.service.RentalService;  // Importa a classe RentalService, que processa o aluguel
+import model.util.InputValidator;
 
 public class Program {
     public static void main(String[] args) {
@@ -28,18 +29,18 @@ public class Program {
         // Bloco try-catch para capturar exceções durante a execução do programa
         try {
             // Solicita que o usuário insira os dados do aluguel de carro
-            System.out.println("Entre com os dados do aluguem: ");
+            System.out.println("Entre com os dados do aluguel: ");
 
             System.out.print("Modelo do carro: ");
             String carModel = sc.nextLine();  // Lê o modelo do carro
 
-            System.out.println("Retirada (dd/MM/yyyy hh:mm): ");
+            System.out.println("Retirada (dd/MM/yyyy HH:mm): ");
             // Lê e converte a data/hora de retirada usando o DateTimeFormatter
-            LocalDateTime start = LocalDateTime.parse(sc.nextLine(), dtf);
+            LocalDateTime start = InputValidator.validateDate(sc);
 
-            System.out.println("Retorno (dd/MM/yyyy hh:mm): ");
+            System.out.println("Retorno (dd/MM/yyyy HH:mm): ");
             // Lê e converte a data/hora de retorno usando o DateTimeFormatter
-            LocalDateTime finish = LocalDateTime.parse(sc.nextLine(), dtf);
+            LocalDateTime finish = InputValidator.validateDate(sc);
 
             // Validação: Se a data de entrega (finish) for anterior à data de retirada (start), lança exceção
             if (finish.isBefore(start)) {
@@ -71,19 +72,14 @@ public class Program {
             System.out.println("IMPOSTO " + cr.getInvoice().getTax());
             System.out.println("PAGAMENTO TOTAL " + cr.getInvoice().getTotalPayment());
 
-            // Captura exceção personalizada se a data estiver em formato inválido
+        } catch (DateTimeParseException e) {
+            System.out.println("Erro de formatação de data: " + e.getMessage());  // Exibe a mensagem de erro de formatação de data
         } catch (InvalidDateException e) {
-            System.out.println(e.getMessage());  // Exibe a mensagem de erro da exceção personalizada
-
-            // Captura exceção personalizada para formatação inválida de data
+            System.out.println(e.getMessage());  // Exibe a mensagem de erro personalizada sem a palavra "Erro"
         } catch (InvalidReturnDateException e) {
-            System.out.println(e.getMessage());  // Exibe a mensagem de erro da exceção personalizada
-
-            // Captura qualquer outra exceção inesperada
+            System.out.println(e.getMessage());  // Exibe a mensagem de erro quando a data de retorno é inválida
         } catch (Exception e) {
-            System.out.println("Erro inesperado: " + e.getMessage());  // Exibe mensagem de erro genérica
-
-            // Bloco finally que sempre será executado, fecha o scanner
+            System.out.println("Erro inesperado: " + e.getMessage());  // Exibe mensagem de erro genérica para outras exceções
         } finally {
             sc.close();  // Fecha o scanner após a execução do programa
         }
